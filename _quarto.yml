@@ -16,4 +16,4 @@ format:
     include-before-body: radar-header.html
     
 execute:
-  freeze: auto
+  freeze: false

@@ -1,5 +1,5 @@
 ---
-title: "Template Title"
+title: "Example RADAR Report"
 format: 
   html:
     code-fold: true
@@ -14,13 +14,142 @@ format:
 # Use quarto render to generate a static site in /docs
 # Set github pages to deploy from main branch, /docs
 
+# Insure packages are installed by checking required packages against installed packages
+reqd_pkgs <- c("flextable",
+               "sf",
+               "tidyverse",
+               "mapgl",
+               "htmltools")
+
+install.packages(
+  setdiff(
+    reqd_pkgs,
+    rownames(installed.packages())
+  )
+)
+
 library(flextable)
 library(sf)
 library(tidyverse)
+library(mapgl)
+library(htmltools)
 
 # If needed, ensure that the Quarto render and RStudio read the same environment vars
 # readRenviron(".Renviron")
 
 ```
 
+This branch is for a brief RADAR report example that includes examples of typical elements:
 
+* Code blocks
+* Inline code
+* Hyperlinks 
+* Graphs
+* Interactive maps
+* Block quotes
+
+The code block above contains per-block rendering options, denoted by `#|`. Look, code formatting! Required packages are then written to a character vector `reqd_pkgs` which is used to compare against already-installed R packages using the `setdiff()` function.
+
+Once packages are installed, they may be used by calling the `library()` function. The common packages used here are:
+
+* `flextable`: used for tables, flexible and extensible, hence the name
+* `sf`: the standard package for geospatial work in R -- introduces spatial objects and operations
+* `tidyverse`: a collection of packages used for working with data, all centered around the [tidy]("https://vita.had.co.nz/papers/tidy-data.pdf") framework
+* `mapgl`: an R implementation of the two common OpenGL-based map frameworks, Mapbox GL JS and MapLibre GL JS
+
+Let's set up some elements using the built-in datasets that come with R and the above packages.
+
+To render the report as `docs/index.html`, run `quarto render index.qmd` from the command line in the repo root.
+
+One of the packages in `tidyverse` is the popular `ggplot2`, used to create data analysis graphics using the "Grammar of Graphics". A useful reference is the online book [ggplot2: Elegant Graphics for Data Analysis (3e)]("https://ggplot2-book.org/"), which was made with Quarto!
+
+The number of diamonds by color and cut in the built in `diamonds` data set can be visualized using a stacked bar chart. We'll define the category color manually:
+
+```{r}
+#| out-width: 100%
+#| code-fold: false
+
+ggplot(data = diamonds,
+       aes(color, fill = cut)) +
+  geom_bar() + 
+  xlab("Color Category") +
+  ylab("Count") +
+  labs(title = "Diamonds by Color and Cut",
+       subtitle = "Source: diamonds (built-in dataset)") +
+  scale_fill_discrete(name = "Color Category",
+                      palette = c("#f1eef6",
+                                  "#bdc9e1",
+                                  "#74a9cf",
+                                  "#2b8cbe",
+                                  "#045a8d"))
+```
+
+Virtually every element of a `ggplot` graphic can be modified. Let's say we want to remove the panel shading, leaving only y-axis major grid lines in a light grey, and update the text color to a softer black:
+
+```{r}
+#| out-width: 100%
+#| code-fold: false
+
+ggplot(data = diamonds,
+       aes(color, fill = cut)) +
+  geom_bar() + 
+  xlab("Color Category") +
+  ylab("Count") +
+  labs(title = "Diamonds by Color and Cut",
+       subtitle = "Source: diamonds (built-in dataset)") +
+  scale_fill_discrete(name = "Color Category",
+                      palette = c("#f1eef6",
+                                  "#bdc9e1",
+                                  "#74a9cf",
+                                  "#2b8cbe",
+                                  "#045a8d")) +
+  scale_y_continuous( breaks = seq(0, 30000, by = 5000)) +
+  theme(
+    panel.background = element_blank(),
+    panel.grid.major.y = element_line(color = "grey80"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.ticks = element_blank(),
+    text = element_text(color = "#141414"),
+    axis.text = element_text(color = "#141414")
+  )
+```
+
+And so and and so on. LLMs are good with helping with the arcane little tweaks for plots.
+
+The `sf` package has a built in dataset of SIDS sample data in North Carolina. Let's use `mapgl` to take a look at area by county:
+
+```{r}
+#| message: false
+#| warning: false
+#| code-fold: false
+
+nc <- st_read(system.file("shape/nc.shp", package="sf"),
+              quiet = TRUE)
+
+maplibre_view(nc, column = "AREA")
+```
+<br/ >
+How about a table of the same information? Flextable is a little tricky in that its output is rendered as an HTML widget that generates its own HTML that gets injected into the page. To control the vertical height and overflow using `styles.css` you have to wrap the class using the `html_tools` package:
+```{r}
+#| code-fold: FALSE
+
+
+
+nc |> 
+  st_drop_geometry() |> 
+  flextable() |> 
+  set_table_properties(width = 1, layout = "autofit") |> 
+  htmltools_value() |> 
+  div(class = "scroll-output")
+```
+<br/ >
+Here's an example citation: Kittredge (2026)[^1].
+
+[^1]: [Kittredge, Andrew P. "The Title of a Fake, Nonexistent Paper" Pretend Journal 45.3 (2026): 741-895.](https://en.wikipedia.org/wiki/Smiley#/media/File:Smiley.svg)
+
+And a bit of ol Lorem ipsum:
+
+> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+The end!
