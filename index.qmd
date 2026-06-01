@@ -157,6 +157,7 @@ The `sf` package has a built in dataset of SIDS sample data in North Carolina. L
 #| message: false
 #| warning: false
 #| code-fold: false
+#| out-height: 800px
 
 nc <- st_read(system.file("shape/nc.shp", package="sf"),
               quiet = TRUE)
@@ -167,8 +168,6 @@ maplibre_view(nc, column = "AREA")
 How about a table of the same information? Flextable is a little tricky in that its output is rendered as an HTML widget that generates its own HTML that gets injected into the page. To control the vertical height and overflow using `styles.css` you have to wrap the class using the `html_tools` package:
 ```{r}
 #| code-fold: FALSE
-
-
 
 nc |>
   st_drop_geometry() |>
