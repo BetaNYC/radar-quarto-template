@@ -19,13 +19,15 @@ reqd_pkgs <- c("flextable",
                "sf",
                "tidyverse",
                "mapgl",
-               "htmltools")
+               "htmltools",
+               "officer")
 
 install.packages(
   setdiff(
     reqd_pkgs,
     rownames(installed.packages())
-  )
+  ),
+  repos = "https://cloud.r-project.org"
 )
 
 library(flextable)
@@ -33,9 +35,41 @@ library(sf)
 library(tidyverse)
 library(mapgl)
 library(htmltools)
+library(officer)
 
 # If needed, ensure that the Quarto render and RStudio read the same environment vars
 # readRenviron(".Renviron")
+
+set_flextable_defaults(
+  font.family  = "Authentic Sans",
+  font.size    = 10,        # ~13px (flextable uses points)
+  border.color = "#0b0b0b",
+  background.color = "transparent",
+  padding.top    = 8,
+  padding.bottom = 4,
+  padding.left   = 0,
+  padding.right  = 16
+)
+
+# Wraps a data frame in a CIL-styled flextable ready to embed in the page.
+# Usage: data |> cil_table()
+cil_table <- function(data) {
+  data |>
+    flextable() |>
+    set_table_properties(width = 1, layout = "autofit") |>
+    border_remove() |>
+    hline(
+      border = fp_border(color = "#0b0b0b", width = 0.75),
+      part   = "all"
+    ) |>
+    padding(
+      padding.top = 0, padding.bottom = 4,
+      padding.left = 0, padding.right = 16,
+      part = "header"
+    ) |>
+    htmltools_value() |>
+    div(class = "scroll-output")
+}
 
 ```
 
@@ -136,12 +170,9 @@ How about a table of the same information? Flextable is a little tricky in that 
 
 
 
-nc |> 
-  st_drop_geometry() |> 
-  flextable() |> 
-  set_table_properties(width = 1, layout = "autofit") |> 
-  htmltools_value() |> 
-  div(class = "scroll-output")
+nc |>
+  st_drop_geometry() |>
+  cil_table()
 ```
 <br/ >
 Here's an example citation: Kittredge (2026)[^1].

@@ -11,9 +11,11 @@ format:
     theme:
       - cosmo
       - brand
-    css: styles.css
+    css:
+      - style/cil-theme.css
     toc: false
     include-before-body: radar-header.html
+    include-after-body: radar-footer.html
     
 execute:
   freeze: false
