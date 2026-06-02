@@ -58,6 +58,7 @@ cil_table <- function(data) {
     flextable() |>
     set_table_properties(width = 1, layout = "autofit") |>
     border_remove() |>
+    bold(bold = TRUE, part = "header") |>
     hline(
       border = fp_border(color = "#0b0b0b", width = 0.75),
       part   = "all"

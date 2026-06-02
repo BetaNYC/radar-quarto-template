@@ -160,6 +160,11 @@ figure.chart img {
 }
 
 /* Layout */
+html {
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
 body {
     color: var(--black);
     font-family: 'Authentic Sans';
@@ -174,7 +179,7 @@ body {
 
 #quarto-content {
     display: grid;
-    grid-template-columns: 10vw repeat(9, 1fr) 10vw;
+    grid-template-columns: repeat(11, 1fr);
     gap: 0 16px;
 }
 
