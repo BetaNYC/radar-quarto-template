@@ -53,6 +53,16 @@ p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
     font-size: 16px;
 }
 
+sup {
+    padding: 0 2px;
+}
+
+.blockquote {
+    color: var(--black);
+    padding: 0 16px;
+    margin: 16px 0;
+}
+
 .fine-print {
     font-size: 11px;
     line-height: 16px;
@@ -161,7 +171,7 @@ figure.chart img {
 
 /* Layout */
 html {
-    max-width: 1240px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -189,10 +199,22 @@ body {
 
 header.cil-header {
     position: fixed;
+    max-width: 1200px;
+    margin: 0 auto;
     top: 32px;
     left: 32px;
+    right: 32px;
     z-index: 10000;
 }
+
+    header.cil-header a:link {
+        text-decoration: none;
+    }
+
+    header.cil-header li a:hover {
+        background-color: var(--vellum);
+        color: var(--cil-blue);
+    }
 
     .radar-logo-lockup {
         color: var(--cil-blue);
@@ -205,6 +227,7 @@ header.cil-header {
         .radar-logo-lockup img {
             width: 26.451px;
             height: 42.088px;
+            background-color: #fff;
         }
 
     ul.title-cascade {
@@ -292,8 +315,14 @@ header.cil-header {
         padding: 32px 0 0 0;
     }
 
+    .maplibregl-map {
+        height: auto !important;
+        aspect-ratio: 5/4;
+        max-height: 800px;
+    }
+
     .figure-img {
-        margin-bottom: 8px;
+        padding: 16px 0;
     }
 
     .scroll-output {
@@ -327,13 +356,28 @@ header.cil-header {
         padding-top: 32px;
     }
 
+    .tippy-box {
+        max-width: 416px !important;
+        background-color: var(--vellum) !important;
+        border: 1px solid var(--gray) !important;
+    }
+
+        .tippy-content {
+            padding: 8px;
+        }
+
+        .tippy-content p {
+            font-size: 0.9em;
+        }
+
     .footnotes {
-        margin-top: 16px;
+        margin: 16px 0;
         font-size: 15px;
     }
 
     #quarto-appendix.default .quarto-appendix-heading {
         font-weight: normal;
+        padding-bottom: 16px;
     }
 
     #quarto-appendix.default ol li p {
@@ -350,21 +394,41 @@ header.cil-header {
 
 footer {
     grid-column: 2/11 !important;
-    padding-top: 64px;
     color: var(--cil-blue);
+    padding-top: 32px !important;
     padding-bottom: 32px;
 }
 
-.cil-logo-lockup {
-    color: var(--cil-blue);
-    font-size: 13px;
-    line-height: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-    .cil-logo-lockup img {
-        width: 47.654px;
-        height: 21.218px;
+    footer a:link {
+        text-decoration: none;
     }
+
+    footer span a:hover {
+        background-color: var(--vellum);
+        color: var(--cil-blue);
+    }
+
+    .cil-logo-lockup {
+        color: var(--cil-blue);
+        font-size: 13px;
+        line-height: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .cil-logo-lockup img {
+            width: 47.654px;
+            height: 21.218px;
+        }
+
+
+@media screen and (max-width: 960px) {
+    #quarto-document-content {
+        grid-column: 1/-1;
+    }
+
+    footer {
+        grid-column: 1/-1 !important;
+    }
+}

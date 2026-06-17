@@ -4,14 +4,14 @@
 /* Authentic Sans */
 @font-face {
     font-family: 'Authentic Sans';
-    src: url('../fonts/authentic-sans-90.otf') format('opentype');
+    src: url('../fonts/authentic-sans-pro-90.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Authentic Sans';
-    src: url('../fonts/authentic-sans-130.otf') format('opentype');
+    src: url('../fonts/authentic-sans-pro-130.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
 }
@@ -19,14 +19,14 @@
 /* Authentic Sans Condensed */
 @font-face {
     font-family: 'Authentic Sans Condensed';
-    src: url('../fonts/authentic-sans-condensed-90.otf') format('opentype');
+    src: url('../fonts/authentic-sans-pro-condensed-90.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Authentic Sans Condensed';
-    src: url('../fonts/authentic-sans-condensed-130.otf') format('opentype');
+    src: url('../fonts/authentic-sans-pro-condensed-130.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
 }
