@@ -22,6 +22,39 @@ p:not(:last-child) {
     margin-bottom: 16px;
 }
 
+h1, h2, h3, h4 {
+    font-family: 'Authentic Sans';
+    font-weight: 600;
+    color: var(--black);
+    letter-spacing: 0.008em;
+    text-wrap: balance;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 32px 0 16px 0;
+}
+
+h2 {
+    font-size: 18px;
+    line-height: 22px;
+    margin: 32px 0 16px 0;
+}
+
+h3 {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 32px 0 8px 0;
+}
+
+h4 {
+    font-size: 14px;
+    line-height: 18px;
+    margin: 24px 0 8px 0;
+}
+
 a:link, a:visited {
     color: var(--cil-blue);
     text-underline-offset: 2px;
