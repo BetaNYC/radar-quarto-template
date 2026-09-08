@@ -30,12 +30,8 @@ install.packages(
   repos = "https://cloud.r-project.org"
 )
 
-library(flextable)
-library(sf)
-library(tidyverse)
-library(mapgl)
-library(htmltools)
-library(officer)
+lapply(reqd_pkgs, library, character.only = TRUE) |> 
+  invisible()
 
 # If needed, ensure that the Quarto render and RStudio read the same environment vars
 # readRenviron(".Renviron")
@@ -52,24 +48,73 @@ set_flextable_defaults(
 )
 
 # Wraps a data frame in a CIL-styled flextable ready to embed in the page.
-# Usage: data |> cil_table()
-cil_table <- function(data) {
-  data |>
-    flextable() |>
-    set_table_properties(width = 1, layout = "autofit") |>
+# Columns size to their content by default. `widths` overrides that: one value
+# per column, or named values setting just those columns. `max_width` caps the
+# fitted widths, never the ones `widths` names.
+# Usage: data |> cil_table(widths = c("Purpose of Funds" = 4))
+cil_table <- function(data, widths = NULL, heights = NULL,
+                      max_width = NULL, unit = "in", full_width = TRUE) {
+  ft <- flextable(data)
+  fitted <- !(is.null(widths) && is.null(max_width))
+  
+  if (fitted && full_width) {
+    stop("`full_width` stretches columns to the container; `widths`/`max_width` ",
+         "pin them. Use one or the other.", call. = FALSE)
+  }
+
+  if (!fitted) {
+    # Browser-side content fitting, like Excel's Autofit. width = 0 leaves the
+    # table unconstrained; width = 1 would stretch it to 100% regardless of text.
+    ft <- set_table_properties(ft, if (full_width) 1 else 0, layout = "autofit")
+  } else {
+    # Fitted widths are the baseline, capped by max_width, then overridden by
+    # anything `widths` names. "autofit" discards widths, so this must be fixed.
+    fit <- unlist(dim_pretty(ft)$widths)
+    if (!is.null(max_width)) fit <- pmin(fit, max_width)
+    if (is.null(widths)) {
+      widths <- fit
+    } else if (!is.null(names(widths)) && all(nzchar(names(widths)))) {
+      unknown <- setdiff(names(widths), names(data))
+      if (length(unknown)) {
+        stop("`widths` names no such column: ", paste(unknown, collapse = ", "),
+             call. = FALSE)
+      }
+      fit[match(names(widths), names(data))] <- widths
+      widths <- fit
+    } else if (length(widths) != ncol(data)) {
+      # Otherwise they land on the first columns, misaligning every one.
+      stop("`widths` has ", length(widths), " value(s) but `data` has ",
+           ncol(data), " column(s). Give one width per column, or name them.",
+           call. = FALSE)
+    }
+    ft <- set_table_properties(ft, layout = "fixed")
+    ft <- width(ft, j = seq_along(widths), width = widths, unit = unit)
+  }
+
+  if (!is.null(heights)) {
+    # Heights are only emitted under the "exact" rule; "auto" ignores them.
+    ft <- height(ft, height = heights, part = "body", unit = unit)
+    ft <- hrule(ft, rule = "exact", part = "body")
+  }
+
+  ft |>
     border_remove() |>
     bold(bold = TRUE, part = "header") |>
-    hline(
-      border = fp_border(color = "#0b0b0b", width = 0.75),
-      part   = "all"
-    ) |>
+    hline(border = fp_border(color = "#0b0b0b", width = 1.5),  part = "header") |>
+    hline(border = fp_border(color = "#969696", width = 0.75), part = "body") |>
     padding(
       padding.top = 0, padding.bottom = 4,
       padding.left = 0, padding.right = 16,
       part = "header"
     ) |>
-    htmltools_value() |>
-    div(class = "scroll-output")
+    # Both steps are needed to keep the table out of a shadow DOM, which no page
+    # CSS can reach: ft.shadow drops the static host, and the rename hides the
+    # wrapper from tabwid.js, which shadow-roots every .tabwid on DOMContentLoaded.
+    htmltools_value(ft.shadow = FALSE) |>
+    as.character() |>
+    sub(pattern = 'class="tabwid"', replacement = 'class="cil-tabwid"', fixed = TRUE) |>
+    HTML() |>
+    div(class = if (fitted) "scroll-output scroll-output--fit" else "scroll-output")
 }
 
 ```

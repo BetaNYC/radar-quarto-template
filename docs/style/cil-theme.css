@@ -22,39 +22,6 @@ p:not(:last-child) {
     margin-bottom: 16px;
 }
 
-h1, h2, h3, h4 {
-    font-family: 'Authentic Sans';
-    font-weight: 600;
-    color: var(--black);
-    letter-spacing: 0.008em;
-    text-wrap: balance;
-    -webkit-font-smoothing: antialiased;
-}
-
-h1 {
-    font-size: 20px;
-    line-height: 24px;
-    margin: 32px 0 16px 0;
-}
-
-h2 {
-    font-size: 18px;
-    line-height: 22px;
-    margin: 32px 0 16px 0;
-}
-
-h3 {
-    font-size: 16px;
-    line-height: 20px;
-    margin: 32px 0 8px 0;
-}
-
-h4 {
-    font-size: 14px;
-    line-height: 18px;
-    margin: 24px 0 8px 0;
-}
-
 a:link, a:visited {
     color: var(--cil-blue);
     text-underline-offset: 2px;
@@ -191,6 +158,13 @@ table {
         padding-top: 8px;
     }
 
+    /* flextable emits a real <thead>, so the counter above would add a phantom
+       cell to body rows only, shifting every column one position. */
+    .scroll-output tbody tr::before {
+        display: none;
+        content: none;
+    }
+
 figure.chart {
     width: 100%;
     display: flex;
@@ -278,16 +252,83 @@ header.cil-header {
     margin-block-end: 0;
 }
 
-.quarto-title {
-    padding: 64px 0 24px 0;
-    font-size: 22px;
-    line-height: 26px;
+/* Headings */
+/* Cosmo underlines every h2 and dims h4-h6 to .9. Reset at the group level so
+   no level can reintroduce a rule. */
+h1, h2, h3, h4, h5, h6 {
+    border-bottom: none;
+    padding-bottom: 0;
+    color: var(--black);
+    opacity: 1;
+    text-wrap: balance;
 }
 
-    .quarto-title h1 {
-       font-weight: unset;
-       font-size: unset;
+.quarto-title {
+    padding: 64px 0 24px 0;
+}
+
+    .quarto-title .title {
+        font-size: 24px;
+        line-height: 28px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin: 0;
     }
+
+    /* Quarto pads .subtitle from #quarto-content, so the id has to be in the
+       selector to outrank it. */
+    #quarto-content .quarto-title .subtitle {
+        font-size: 19px;
+        line-height: 26px;
+        font-weight: 400;
+        letter-spacing: 0;
+        color: var(--black);
+        margin: 8px 0 0 0;
+        padding-top: 0;
+    }
+
+/* Space is asymmetric on purpose: a heading sits closer to the section it
+   opens than to the one it closes. */
+h1 {
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 32px 0 16px 0;
+}
+
+h2 {
+    font-size: 19px;
+    line-height: 26px;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin: 48px 0 16px 0;
+}
+
+h3 {
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 600;
+    letter-spacing: 0.008em;
+    margin: 32px 0 8px 0;
+}
+
+/* Bottom rung is a label, not a heading. It reuses the 13/16 tier the lockups
+   and tables already use, and separates by case, not size. */
+h4 {
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 24px 0 8px 0;
+}
+
+/* .quarto-title already pads 24px below; padding blocks the collapse that
+   would otherwise absorb the first heading's margin. */
+#quarto-document-content > section:first-child > :is(h1, h2, h3, h4):first-child {
+    margin-top: 0;
+}
 
 .radar-body {
     display: flex;
@@ -363,10 +404,35 @@ header.cil-header {
         overflow-y: auto;
         max-height: 400px;
         max-width: 100%;
-        padding: 0.5rem;
-        border: none;
+        padding: 0 0 0.5rem 0.5rem;
+        border-top: 0.5rem solid #ffffff;
         background-color: #ffffff;
         color: #141414;
+    }
+
+    /* The global `table-layout: fixed` above caps these tables at the container
+       and squeezes every column to an equal share. Auto layout alone isn't
+       enough where cil_table() sets explicit widths — those also need an
+       intrinsic width to survive, and the container then scrolls. */
+    .scroll-output table {
+        table-layout: auto;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .scroll-output--fit table {
+        width: max-content;
+    }
+
+    /* dim_pretty() estimates header widths a hair under what the browser
+       renders, so computed widths alone still wrap. A column narrower than its
+       header grows to fit it. */
+    .scroll-output thead th {
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: #ffffff;
     }
 
     .scroll-output::-webkit-scrollbar {
