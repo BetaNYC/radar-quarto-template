@@ -5,7 +5,7 @@ project:
 
 website:
   navbar: false
-
+  favicon: images/logos/RADAR.svg
 format:
   html:
     theme:
