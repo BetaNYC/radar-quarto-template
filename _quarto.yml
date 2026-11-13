@@ -4,9 +4,6 @@ project:
     - images
     - output
   output-dir: docs
-  # Builds whats-changed.qmd from WHATS-CHANGED.md before every render.
-  # In a report copied from this template, change the --repo-url to the report's repo.
-  pre-render: python3 scripts/whats_changed.py render WHATS-CHANGED.md --format quarto --out whats-changed.qmd --site-prefix docs/ --repo-url https://github.com/BetaNYC/radar-quarto-template
 
 website:
   navbar: false
