@@ -10,7 +10,7 @@ To report a bug in the template, or to ask for a new feature, [open an issue on 
 ## 2026-11-12: New page listing what has changed in the template
 
 - **Tags:** Site
-- **What changed:** This page is new, and every report made from the template now starts with one. It lists the changes a reader would notice, and gives a place to say plainly if a report ever publishes a number that turns out to be wrong. A link to it will appear in the footer of every page the next time the site is rebuilt.
+- **What changed:** This page is new, and every new report now starts with one. It lists the changes a reader would notice, and gives a place to say plainly if a report ever publishes a number that turns out to be wrong. A link to it will appear in the footer of every page the next time the site is rebuilt.
 - **More detail:** [The change history in this repository](https://github.com/BetaNYC/radar-quarto-template/commits/main)
 
 ## 2026-09-15: Setup instructions, an optional database, and a source code link

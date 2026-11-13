@@ -35,7 +35,7 @@ anchor-sections: false
 <h2 id="2026-11-12-new-page-listing-what-has-changed-in-the-template-title">New page listing what has changed in the template</h2>
 <p class="wc-meta"><time datetime="2026-11-12">November 12, 2026</time></p>
 <p class="wc-tags"><span class="wc-visually-hidden">Tags: </span><span class="wc-tag">Site</span></p>
-<p>This page is new, and every report made from the template now starts with one. It lists the changes a reader would notice, and gives a place to say plainly if a report ever publishes a number that turns out to be wrong. A link to it will appear in the footer of every page the next time the site is rebuilt.</p>
+<p>This page is new, and every new report now starts with one. It lists the changes a reader would notice, and gives a place to say plainly if a report ever publishes a number that turns out to be wrong. A link to it will appear in the footer of every page the next time the site is rebuilt.</p>
 <p><strong>More detail:</strong> <a href="https://github.com/BetaNYC/radar-quarto-template/commits/main">The change history in this repository</a></p>
 <p class="wc-permalink"><a href="#2026-11-12-new-page-listing-what-has-changed-in-the-template">Link to this change<span class="wc-visually-hidden">: New page listing what has changed in the template</span></a></p>
 </article>
