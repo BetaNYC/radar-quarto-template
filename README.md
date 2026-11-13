@@ -2,6 +2,16 @@
 
 A [Quarto](https://quarto.org) report template for BetaNYC's Research and Data Assistance Request (RADAR) service published using GitHub Pages.
 
+## What's changed
+
+[`WHATS-CHANGED.md`](WHATS-CHANGED.md) lists the changes a reader would notice, newest first, including any correction to a published number. The site shows it at [https://betanyc.github.io/radar-quarto-template/whats-changed.html](https://betanyc.github.io/radar-quarto-template/whats-changed.html).
+
+- `_quarto.yml` builds `whats-changed.qmd` from it before every render (`pre-render`). Edit `WHATS-CHANGED.md`, never `whats-changed.qmd`. `scripts/whats_changed.py` is a copy of BetaNYC's shared script: do not edit it here.
+- Never rewrite a published entry. Add a dated `- **Update YYYY-MM-DD:**` line instead. The `What's changed` workflow checks this on every pull request.
+- The footer link to the page lives in `radar-footer.html`. Pages rendered before it was added (everything except the What's changed page itself) show the link, and the logo alt text added to `radar-header.html` and `radar-footer.html` at the same time, only after their next full `quarto render`.
+- A new entry is dated the day it goes live. If the pull request that adds one merges on a later day, its last commit before merge changes the date to the merge day and re-renders the page (`quarto render whats-changed.qmd`).
+- **Starting a new report from this template?** Replace the entries in `WHATS-CHANGED.md` with one for your report's first publication, set **History begins** and the intro for your report, and change `--repo-url` in the `pre-render` line of `_quarto.yml` to your report's repository. The workflow in `.github/workflows/whats-changed.yml` needs no change. If you make that switch in a pull request, add a line `Whats-changed-edit: new report from the template` to its commit message, because the check otherwise refuses removed entries.
+
 ## Requirements
 
 - [R](https://cran.r-project.org) and [Quarto](https://quarto.org/docs/get-started/)
